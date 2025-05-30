@@ -1,4 +1,5 @@
 #include "napi/native_api.h"
+#include "SDL3/SDL_log.h"
 
 static napi_value Add(napi_env env, napi_callback_info info)
 {
@@ -21,6 +22,8 @@ static napi_value Add(napi_env env, napi_callback_info info)
 
     napi_value sum;
     napi_create_double(env, value0 + value1, &sum);
+
+    SDL_Log("Add invoke!");
 
     return sum;
 
