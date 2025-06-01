@@ -4,13 +4,26 @@ import sdltest from 'libSDL3.so';
 
 const DOMAIN = 0x0000;
 
+export class ArkNapiCallback {
+  test(): number {
+    hilog.info(DOMAIN, 'testTag', 'Call from native !!!');
+    return 1;
+  }
+}
+
+let callbackRef: ArkNapiCallback = new ArkNapiCallback()
+
+function sdlCallbackInitImpl() {
+  sdltest.sdlCallbackInit(callbackRef)
+}
+
 @Entry
 @Component
 struct Index {
   aboutToAppear(): void {
-    hilog.info(DOMAIN, 'testTag', 'Test SDL 2 - 1 = %{public}d', sdltest.minus(2, 1));
-    hilog.info(DOMAIN, 'testTag', 'Test NAPI 2 + 3 = %{public}d', testNapi.add(2, 3));
-    sdltest.sdlLaunchMain("libentry.so", "main");
+    sdlCallbackInitImpl()
+    hilog.info(DOMAIN, 'testTag', 'Test SDL 2 - 1 = %{public}d', sdltest.minus(2, 1))
+    hilog.info(DOMAIN, 'testTag', 'Test NAPI 2 + 3 = %{public}d', testNapi.add(2, 3))
   }
 
   build() {
