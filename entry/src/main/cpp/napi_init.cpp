@@ -38,6 +38,12 @@ static napi_value Init(napi_env env, napi_value exports)
     napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc);
     return exports;
 }
+
+int main()
+{
+    SDL_Log("Main func invoke !!!");
+    return 0;
+}
 EXTERN_C_END
 
 static napi_module demoModule = {
