@@ -1,5 +1,9 @@
+#include "SDL3/SDL_video.h"
+#include "SDL3/SDL_vulkan.h"
 #include "napi/native_api.h"
 #include "SDL3/SDL_log.h"
+#include "SDL3/SDL_hints.h"
+#include <stdlib.h>
 
 static napi_value Add(napi_env env, napi_callback_info info)
 {
@@ -42,6 +46,16 @@ static napi_value Init(napi_env env, napi_value exports)
 int main()
 {
     SDL_Log("Main func invoke !!!");
+    SDL_SetHint(SDL_HINT_EGL_LIBRARY, "libEGL.so");
+    SDL_SetHint(SDL_HINT_OPENGL_LIBRARY, "libGLESv3.so");
+    SDL_SetHint(SDL_HINT_OPENGL_ES_DRIVER, "libGLESv3.so");
+    SDL_GL_LoadLibrary(nullptr);
+    SDL_Window* win = SDL_CreateWindow("test", 1024, 1024, SDL_WINDOW_OPENGL);
+    SDL_Vulkan_LoadLibrary(nullptr);
+    unsigned int c = 0;
+    const char* const* data = SDL_Vulkan_GetInstanceExtensions(&c);
+    SDL_Log("Main func invoke !!! %s %p %s %s", SDL_GetError(), win, data[0], data[1]);
+    
     return 0;
 }
 EXTERN_C_END

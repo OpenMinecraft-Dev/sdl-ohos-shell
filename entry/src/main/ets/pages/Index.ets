@@ -10,6 +10,7 @@ struct Index {
   aboutToAppear(): void {
     hilog.info(DOMAIN, 'testTag', 'Test SDL 2 - 1 = %{public}d', sdltest.minus(2, 1));
     hilog.info(DOMAIN, 'testTag', 'Test NAPI 2 + 3 = %{public}d', testNapi.add(2, 3));
+    sdltest.sdlLaunchMain("libentry.so", "main");
   }
 
   build() {
