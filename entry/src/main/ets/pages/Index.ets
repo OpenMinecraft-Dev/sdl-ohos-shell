@@ -6,7 +6,8 @@ const DOMAIN = 0x0000;
 
 export class ArkNapiCallback {
   test(): number {
-    hilog.info(DOMAIN, 'testTag', 'Call from native !!!');
+    hilog.info(DOMAIN, 'testTag', 'Call from native !!!'); // 竟然一次就成功了（（（
+    focusControl.requestFocus("inputHandler")
     return 1;
   }
 }
@@ -28,7 +29,12 @@ struct Index {
 
   build() {
     Stack() {
-      XComponent({ id: 'test', type: 'surface', libraryname: 'SDL3' })
+      TextInput().key('inputHandler').onChange((value: string) => {
+        hilog.info(DOMAIN, 'testTag', value)
+      }).onSubmit(() => {
+        hilog.info(DOMAIN, 'testTag', "submit")
+      })
+      XComponent({ id: 'test', type: 'surface', libraryname: 'SDL3' }).key("mainView")
     }
   }
 }
