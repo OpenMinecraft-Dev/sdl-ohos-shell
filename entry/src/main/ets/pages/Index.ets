@@ -28,13 +28,16 @@ struct Index {
   }
 
   build() {
-    Stack() {
+    Column() {
+      XComponent({ id: 'test', type: 'surface', libraryname: 'SDL3' }).key("mainView").backgroundColor('#eeeeee')
       TextInput().key('inputHandler').onChange((value: string) => {
         hilog.info(DOMAIN, 'testTag', value)
       }).onSubmit(() => {
         hilog.info(DOMAIN, 'testTag', "submit")
       })
-      XComponent({ id: 'test', type: 'surface', libraryname: 'SDL3' }).key("mainView")
+
     }
+    .alignItems(HorizontalAlign.End)
+    .justifyContent(FlexAlign.End)
   }
 }
