@@ -10,9 +10,6 @@
       "2in1"
     ],
     "requestPermissions": [
-      /*{
-        "name": "ohos.permission.CONNECT_IME_ABILITY"
-      }*/
     ],
     "deliveryWithInstall": true,
     "installationFree": false,
