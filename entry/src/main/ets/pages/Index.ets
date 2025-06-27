@@ -1,5 +1,4 @@
 import { hilog } from '@kit.PerformanceAnalysisKit';
-import testNapi from 'libentry.so';
 import sdltest from 'libSDL3.so';
 import { intl } from '@kit.LocalizationKit';
 
