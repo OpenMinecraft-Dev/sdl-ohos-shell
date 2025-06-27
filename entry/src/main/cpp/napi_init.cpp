@@ -51,9 +51,15 @@ static napi_value Init(napi_env env, napi_value exports)
 }
 
 float vtxdata[] = {
-    -0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f, 
-    0.5f, -0.5f, 0.0f, 1.f, 1.f, 1.f, 
-    0.0f, 0.5f, 0.0f, 1.f, 1.f, 1.f
+    -0.5f, -0.5f, 0.f,
+    0.5f, -0.5f, 0.0f,
+    0.0f, 0.5f, 0.0f
+};
+
+float vtxdata2[] = {
+    0.f, 0.f, 1.f, 
+    0.f, 1.f, 0.f, 
+    1.f, 0.f, 0.f
 };
 
 int main()
@@ -112,9 +118,9 @@ int main()
     ((PFNGLCLEARPROC)SDL_GL_GetProcAddress("glClear"))(GL_COLOR_BUFFER_BIT);
     ((PFNGLUSEPROGRAMPROC)SDL_GL_GetProcAddress("glUseProgram"))(prog);
         
-    ((PFNGLVERTEXATTRIBPOINTERPROC)SDL_GL_GetProcAddress("glVertexAttribPointer"))(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)vtxdata);
+    ((PFNGLVERTEXATTRIBPOINTERPROC)SDL_GL_GetProcAddress("glVertexAttribPointer"))(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)vtxdata);
     ((PFNGLENABLEVERTEXATTRIBARRAYPROC)SDL_GL_GetProcAddress("glEnableVertexAttribArray"))(0);
-    ((PFNGLVERTEXATTRIBPOINTERPROC)SDL_GL_GetProcAddress("glVertexAttribPointer"))(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(vtxdata + 3 * sizeof(float)));
+    ((PFNGLVERTEXATTRIBPOINTERPROC)SDL_GL_GetProcAddress("glVertexAttribPointer"))(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)vtxdata2);
     ((PFNGLENABLEVERTEXATTRIBARRAYPROC)SDL_GL_GetProcAddress("glEnableVertexAttribArray"))(1);
         
     ((PFNGLDRAWARRAYSPROC)SDL_GL_GetProcAddress("glDrawArrays"))(GL_TRIANGLES, 0, 3);
