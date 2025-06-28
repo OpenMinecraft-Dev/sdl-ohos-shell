@@ -5,6 +5,9 @@ import { intl } from '@kit.LocalizationKit';
 const DOMAIN = 0x0000;
 
 export class ArkNapiCallback {
+  onMainLaunch() {
+    sdltest.sdlLaunchMain("libentry.so", "main")
+  }
   test(): number {
     hilog.info(DOMAIN, 'testTag', 'Call from native !!!');
     focusControl.requestFocus("inputHandler")
@@ -16,33 +19,17 @@ export class ArkNapiCallback {
 
 let callbackRef: ArkNapiCallback = new ArkNapiCallback()
 
-function sdlCallbackInitImpl() {
-  sdltest.sdlCallbackInit(callbackRef)
-}
-
-async function sdlMain(): Promise<void> {
-  const result =
-    await new Promise<number>((resolve, reject) => {
-      setTimeout(() => {
-        sdltest.sdlLaunchMain("libentry.so", "main")
-        resolve(0);
-      }, 1000)
-    })
-}
-
 @Entry
 @Component
 struct Index {
   aboutToAppear(): void {
-    sdlCallbackInitImpl()
-    sdlMain()
+    sdltest.sdlCallbackInit(callbackRef)
   }
 
   build() {
     Column() {
       XComponent({ id: 'mainView', type: 'surface', libraryname: 'SDL3' })
         .id('mainView')
-        .backgroundColor('#999999')
       TextInput().id('inputHandler').onChange((value: string) => {
         hilog.info(DOMAIN, 'testTag', value)
       }).onSubmit(() => {

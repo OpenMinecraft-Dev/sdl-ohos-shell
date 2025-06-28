@@ -82,7 +82,7 @@ int main()
     int frgshader = ((PFNGLCREATESHADERPROC)SDL_GL_GetProcAddress("glCreateShader"))(GL_FRAGMENT_SHADER);
     int vexshader = ((PFNGLCREATESHADERPROC)SDL_GL_GetProcAddress("glCreateShader"))(GL_VERTEX_SHADER);
     
-    auto frag = "varying vec4 v_color;\nvoid main() {gl_FragColor = v_color;}";
+    auto frag = "varying vec4 v_color;void main() {gl_FragColor = v_color;}";
     ((PFNGLSHADERSOURCEPROC)SDL_GL_GetProcAddress("glShaderSource"))(frgshader, 1, &frag, nullptr);
     ((PFNGLCOMPILESHADERPROC)SDL_GL_GetProcAddress("glCompileShader"))(frgshader);
     int status = 1;
@@ -94,7 +94,7 @@ int main()
     
     SDL_Log("test: %d %d %s", status, status2, log.c_str());
     
-    auto vert = "attribute vec3 pos;\nattribute vec3 color;\nvarying vec4 v_color;\nvoid main() {gl_Position=vec4(pos,1.0);v_color=vec4(color, 1.0);}";
+    auto vert = "attribute vec3 pos;attribute vec3 color;varying vec4 v_color;void main() {gl_Position=vec4(pos,1.0);v_color=vec4(color, 1.0);}";
     ((PFNGLSHADERSOURCEPROC)SDL_GL_GetProcAddress("glShaderSource"))(vexshader, 1, &vert, nullptr);
     ((PFNGLCOMPILESHADERPROC)SDL_GL_GetProcAddress("glCompileShader"))(vexshader);
     ((PFNGLGETSHADERIVPROC)SDL_GL_GetProcAddress("glGetShaderiv"))(vexshader, GL_COMPILE_STATUS, &status);
@@ -114,18 +114,23 @@ int main()
     ((PFNGLDELETESHADERPROC)SDL_GL_GetProcAddress("glDeleteShader"))(vexshader);
     ((PFNGLDELETESHADERPROC)SDL_GL_GetProcAddress("glDeleteShader"))(frgshader);
     
-    ((PFNGLVIEWPORTPROC)SDL_GL_GetProcAddress("glViewport"))(0, 0, 1000, 1000);
-    ((PFNGLCLEARPROC)SDL_GL_GetProcAddress("glClear"))(GL_COLOR_BUFFER_BIT);
-    ((PFNGLUSEPROGRAMPROC)SDL_GL_GetProcAddress("glUseProgram"))(prog);
+    while (true) {
+        int w, h;
+        SDL_GetWindowSize(win, &w, &h);
         
-    ((PFNGLVERTEXATTRIBPOINTERPROC)SDL_GL_GetProcAddress("glVertexAttribPointer"))(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)vtxdata);
-    ((PFNGLENABLEVERTEXATTRIBARRAYPROC)SDL_GL_GetProcAddress("glEnableVertexAttribArray"))(0);
-    ((PFNGLVERTEXATTRIBPOINTERPROC)SDL_GL_GetProcAddress("glVertexAttribPointer"))(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)vtxdata2);
-    ((PFNGLENABLEVERTEXATTRIBARRAYPROC)SDL_GL_GetProcAddress("glEnableVertexAttribArray"))(1);
-        
-    ((PFNGLDRAWARRAYSPROC)SDL_GL_GetProcAddress("glDrawArrays"))(GL_TRIANGLES, 0, 3);
-        
-    SDL_GL_SwapWindow(win);
+        ((PFNGLVIEWPORTPROC)SDL_GL_GetProcAddress("glViewport"))(0, 0, w, h);
+        ((PFNGLCLEARPROC)SDL_GL_GetProcAddress("glClear"))(GL_COLOR_BUFFER_BIT);
+        ((PFNGLUSEPROGRAMPROC)SDL_GL_GetProcAddress("glUseProgram"))(prog);
+        vtxdata2[0] += 0.05f;
+        ((PFNGLVERTEXATTRIBPOINTERPROC)SDL_GL_GetProcAddress("glVertexAttribPointer"))(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)vtxdata);
+        ((PFNGLENABLEVERTEXATTRIBARRAYPROC)SDL_GL_GetProcAddress("glEnableVertexAttribArray"))(0);
+        ((PFNGLVERTEXATTRIBPOINTERPROC)SDL_GL_GetProcAddress("glVertexAttribPointer"))(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)vtxdata2);
+        ((PFNGLENABLEVERTEXATTRIBARRAYPROC)SDL_GL_GetProcAddress("glEnableVertexAttribArray"))(1);
+            
+        ((PFNGLDRAWARRAYSPROC)SDL_GL_GetProcAddress("glDrawArrays"))(GL_TRIANGLES, 0, 3);
+            
+        SDL_GL_SwapWindow(win);
+    }
     
     SDL_Log("glversion: %s", ((PFNGLGETSTRINGPROC)SDL_GL_GetProcAddress("glGetString"))(GL_VERSION));
     
