@@ -12,6 +12,10 @@ export class ArkNapiCallback {
   showDialog(title: string, message: string) {
     promptAction.showDialog({title: title, message: message, buttons: [{text: 'Ok', color: '#999999'}]});
   }
+  fetchLocale(): string {
+    let locale = new intl.Locale();
+    return locale.toString();
+  }
   test(): number {
     hilog.info(DOMAIN, 'testTag', 'Call from native !!!');
     focusControl.requestFocus("inputHandler")
