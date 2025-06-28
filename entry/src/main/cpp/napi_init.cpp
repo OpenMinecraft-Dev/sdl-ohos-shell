@@ -1,6 +1,8 @@
 #include "SDL3/SDL_assert.h"
 #include "SDL3/SDL_init.h"
+#include "SDL3/SDL_messagebox.h"
 #include "SDL3/SDL_render.h"
+#include "SDL3/SDL_timer.h"
 #include "SDL3/SDL_video.h"
 #include "SDL3/SDL_vulkan.h"
 #include "napi/native_api.h"
@@ -76,6 +78,8 @@ int main()
     SDL_Log("sdl error: %s", SDL_GetError());
     SDL_Window* win = SDL_CreateWindow("test", 1024, 1024, SDL_WINDOW_OPENGL);
     
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "SDL Application", "test!", win);
+    
     auto context = SDL_GL_CreateContext(win);
     SDL_GL_MakeCurrent(win, context);
     
@@ -121,12 +125,17 @@ int main()
         ((PFNGLVIEWPORTPROC)SDL_GL_GetProcAddress("glViewport"))(0, 0, w, h);
         ((PFNGLCLEARPROC)SDL_GL_GetProcAddress("glClear"))(GL_COLOR_BUFFER_BIT);
         ((PFNGLUSEPROGRAMPROC)SDL_GL_GetProcAddress("glUseProgram"))(prog);
-        vtxdata2[0] += 0.05f;
+        for (int i = 0; i < 9; i++) {
+            vtxdata2[i] += 0.01f;
+            if (vtxdata2[i] >= 1.f) {
+                vtxdata2[i] = 0.f;
+            }
+        }
         ((PFNGLVERTEXATTRIBPOINTERPROC)SDL_GL_GetProcAddress("glVertexAttribPointer"))(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)vtxdata);
         ((PFNGLENABLEVERTEXATTRIBARRAYPROC)SDL_GL_GetProcAddress("glEnableVertexAttribArray"))(0);
         ((PFNGLVERTEXATTRIBPOINTERPROC)SDL_GL_GetProcAddress("glVertexAttribPointer"))(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)vtxdata2);
         ((PFNGLENABLEVERTEXATTRIBARRAYPROC)SDL_GL_GetProcAddress("glEnableVertexAttribArray"))(1);
-            
+        
         ((PFNGLDRAWARRAYSPROC)SDL_GL_GetProcAddress("glDrawArrays"))(GL_TRIANGLES, 0, 3);
             
         SDL_GL_SwapWindow(win);

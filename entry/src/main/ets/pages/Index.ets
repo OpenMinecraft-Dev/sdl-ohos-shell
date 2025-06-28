@@ -1,12 +1,16 @@
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import sdltest from 'libSDL3.so';
 import { intl } from '@kit.LocalizationKit';
+import { promptAction } from '@kit.ArkUI';
 
 const DOMAIN = 0x0000;
 
 export class ArkNapiCallback {
   onMainLaunch() {
     sdltest.sdlLaunchMain("libentry.so", "main")
+  }
+  showDialog(title: string, message: string) {
+    promptAction.showDialog({title: title, message: message, buttons: [{text: 'Ok', color: '#999999'}]});
   }
   test(): number {
     hilog.info(DOMAIN, 'testTag', 'Call from native !!!');
